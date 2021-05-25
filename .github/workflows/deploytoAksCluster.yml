@@ -1,0 +1,63 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - uses: actions/checkout@master
+    
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Create ACR
+      id: create-acr
+      run: |
+        az acr create -n j4kdemoregistry -g j4kdemoregistry8697-rg --location "West Europe" --sku Standard --admin-enabled
+        echo "::set-output name=acr_username::`az acr credential show -n j4kdemoregistry --query username | xargs`"
+        echo "::set-output name=acr_password::`az acr credential show -n j4kdemoregistry --query passwords[0].value | xargs`"
+        echo "::add-mask::`az acr credential show -n j4kdemoregistry --query passwords[0].value | xargs`"
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: j4kdemoregistry.azurecr.io
+        username: ${{ steps.create-acr.outputs.acr_username }}
+        password: ${{ steps.create-acr.outputs.acr_password }}
+
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t j4kdemoregistry.azurecr.io/j4kcluster:${{ github.sha }} --label dockerfile-path=Dockerfile
+        docker push j4kdemoregistry.azurecr.io/j4kcluster:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      id: login
+      with:
+         kubeconfig: ${{ secrets.aks_j4kcluster_kubeConfig }}
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep j4k-cluster-dev | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace j4k-cluster-dev`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: j4k-cluster-dev
+        container-registry-url: j4kdemoregistry.azurecr.io
+        container-registry-username: ${{ steps.create-acr.outputs.acr_username }}
+        container-registry-password: ${{ steps.create-acr.outputs.acr_password }}
+        secret-name: j4kclusterdockerauth
+       
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: j4k-cluster-dev
+        manifests: |
+          manifests/deployment-1.yml
+          manifests/service-1.yml
+        images: |
+          j4kdemoregistry.azurecr.io/j4kcluster:${{ github.sha }}
+        imagepullsecrets: |
+          j4kclusterdockerauth   
