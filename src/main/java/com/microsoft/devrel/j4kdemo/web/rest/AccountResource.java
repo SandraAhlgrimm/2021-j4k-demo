@@ -7,7 +7,6 @@ import com.microsoft.devrel.j4kdemo.service.MailService;
 import com.microsoft.devrel.j4kdemo.service.UserService;
 import com.microsoft.devrel.j4kdemo.service.dto.AdminUserDTO;
 import com.microsoft.devrel.j4kdemo.service.dto.PasswordChangeDTO;
-import com.microsoft.devrel.j4kdemo.service.dto.UserDTO;
 import com.microsoft.devrel.j4kdemo.web.rest.errors.*;
 import com.microsoft.devrel.j4kdemo.web.rest.vm.KeyAndPasswordVM;
 import com.microsoft.devrel.j4kdemo.web.rest.vm.ManagedUserVM;

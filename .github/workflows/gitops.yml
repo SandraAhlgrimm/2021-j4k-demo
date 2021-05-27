@@ -13,10 +13,10 @@ on:
       - main
 
 env:
-  APPLICATION_NAME: 'judubois-j4kdemo'
-  CONTAINER_REGISTRY: 'juduboisj4kdemo'
-  NAMESPACE: 'judubois'
-  ENVIRONMENT: ''
+  APPLICATION_NAME: 'sakriema-j4kdemo'
+  CONTAINER_REGISTRY: 'sakriemaj4kdemo'
+  NAMESPACE: 'development'
+  ENVIRONMENT: 'sakriema'
 
 jobs:
   build-and-deploy:
