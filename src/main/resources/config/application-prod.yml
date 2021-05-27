@@ -33,7 +33,7 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://psql-sakriema-j4kdemo-001.postgres.database.azure.com:5432/psdb-sakriema-j4kdemo-001
+    url: jdbc:postgresql://psql-sakriema-j4kdemo-001.postgres.database.azure.com:5432/psqldb-sakriema-j4kdemo-001
     username: postgresqladmin@psql-sakriema-j4kdemo-001
     password:
     hikari:
