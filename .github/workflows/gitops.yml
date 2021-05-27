@@ -16,7 +16,7 @@ env:
   APPLICATION_NAME: 'j4kdemo'
   CONTAINER_REGISTRY: 'sakriemaj4kdemo'
   NAMESPACE: 'development'
-  ENVIRONMENT: 'sakriema'
+  ENVIRONMENT: ''
 
 jobs:
   build-and-deploy:
