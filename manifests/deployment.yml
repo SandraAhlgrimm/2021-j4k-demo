@@ -18,7 +18,7 @@ spec:
         app: j4kdemo
     spec:
       containers:
-        - image: acrsakriemaj4kdemo001.azurecr.io/j4kdemo
+        - image: acrsakriemaj4kdemo001.azurecr.io/j4kdemo/j4kdemo
           name: j4kdemo
           ports:
             - containerPort: 8080
