@@ -16,4 +16,4 @@ spec:
         - name: "j4kcluster-67a8"
           image: "j4kdemoregistry.azurecr.io/j4kcluster"
           ports:
-          - containerPort: 80
+          - containerPort: 8080
